@@ -1,0 +1,577 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Discover projects and job listings matching your skills. Search, filter, and sort opportunities in web development, AI, cloud computing, cybersecurity, and more.">
+  <meta name="keywords" content="project listings, job dashboard, tech jobs, developer projects, internships, remote work">
+  <meta name="author" content="Searchable Dashboard">
+  <title>Searchable - Discover Projects That Match Your Skills</title>
+  
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%236366f1'><path d='M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5'/></svg>">
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  
+  <!-- Stylesheet -->
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <!-- Skip to Main Content Link for Accessibility -->
+  <a href="#main-content" class="skip-to-content">Skip to main content</a>
+
+  <!-- Toast Notification Container -->
+  <div id="toast-container" class="toast-container" aria-live="polite" aria-atomic="true"></div>
+
+  <!-- Sticky Header -->
+  <header id="app-header" class="header">
+    <div class="header-container">
+      <div class="header-brand">
+        <a href="#home" class="brand-link" aria-label="Searchable Dashboard Home">
+          <div class="brand-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
+              <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
+              <line x1="12" y1="22.08" x2="12" y2="12"></line>
+            </svg>
+          </div>
+          <span class="brand-name">Searchable<span class="brand-accent">.</span></span>
+        </a>
+      </div>
+
+      <!-- Desktop Navigation -->
+      <nav class="nav-desktop" aria-label="Main Navigation">
+        <ul class="nav-list">
+          <li class="nav-item"><a href="#home" class="nav-link active" id="nav-link-home">Home</a></li>
+          <li class="nav-item"><a href="#listings" class="nav-link" id="nav-link-explore">Explore Listings</a></li>
+          <li class="nav-item"><a href="#about" class="nav-link" id="nav-link-about">About</a></li>
+        </ul>
+      </nav>
+
+      <!-- Header Actions -->
+      <div class="header-actions">
+        <!-- Theme Toggle -->
+        <button id="theme-toggle-btn" class="theme-toggle-btn" aria-label="Toggle dark/light mode" title="Toggle Theme">
+          <svg class="sun-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="5"></circle>
+            <line x1="12" y1="1" x2="12" y2="3"></line>
+            <line x1="12" y1="21" x2="12" y2="23"></line>
+            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+            <line x1="1" y1="12" x2="3" y2="12"></line>
+            <line x1="21" y1="12" x2="23" y2="12"></line>
+            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+          </svg>
+          <svg class="moon-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+          </svg>
+        </button>
+
+        <!-- Saved Listings Counter / Modal trigger -->
+        <button id="saved-listings-btn" class="saved-btn" aria-label="View saved listings" title="Saved Listings">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path>
+          </svg>
+          <span id="saved-badge-count" class="saved-badge">0</span>
+        </button>
+
+        <!-- Mobile Navigation Toggle -->
+        <button id="mobile-menu-btn" class="mobile-menu-btn" aria-label="Toggle navigation menu" aria-expanded="false" aria-controls="mobile-nav">
+          <span class="hamburger-bar"></span>
+          <span class="hamburger-bar"></span>
+          <span class="hamburger-bar"></span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Mobile Navigation Drawer -->
+    <div id="mobile-nav" class="mobile-nav" aria-hidden="true">
+      <ul class="mobile-nav-list">
+        <li><a href="#home" class="mobile-nav-link" id="mob-link-home">Home</a></li>
+        <li><a href="#listings" class="mobile-nav-link" id="mob-link-explore">Explore Listings</a></li>
+        <li><a href="#about" class="mobile-nav-link" id="mob-link-about">About</a></li>
+      </ul>
+    </div>
+  </header>
+
+  <!-- Main Content Wrapper -->
+  <main id="main-content">
+    
+    <!-- Hero Section -->
+    <section id="home" class="hero-section">
+      <div class="hero-background-glow" aria-hidden="true"></div>
+      <div class="hero-container">
+        <div class="hero-badge">
+          <span class="pulse-dot" aria-hidden="true"></span>
+          <span id="hero-total-count-text">Loading opportunities...</span>
+        </div>
+        
+        <h1 class="hero-title">Discover Projects That Match Your Skills<span class="brand-accent">.</span></h1>
+        
+        <p class="hero-description">
+          Explore curated opportunities across cutting-edge tech domains. Filter by technical stack, experience level, and flexible work modes to land your dream project or career move.
+        </p>
+
+        <!-- Hero Search Bar -->
+        <div class="hero-search-wrapper">
+          <form id="hero-search-form" class="hero-search-box" role="search" onsubmit="event.preventDefault();">
+            <label for="search-input" class="visually-hidden">Search project listings by title, skills, description, or keywords</label>
+            <div class="search-icon-wrapper" aria-hidden="true">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="11" cy="11" r="8"></circle>
+                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+              </svg>
+            </div>
+            <input 
+              type="text" 
+              id="search-input" 
+              class="search-input" 
+              placeholder="Search by role, skill (e.g. Python, React, AWS), or keyword..." 
+              autocomplete="off"
+              spellcheck="false"
+            >
+            <button 
+              type="button" 
+              id="search-clear-btn" 
+              class="search-clear-btn" 
+              aria-label="Clear search text" 
+              title="Clear search"
+              hidden
+            >
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="18" y1="6" x2="6" y2="18"></line>
+                <line x1="6" y1="6" x2="18" y2="18"></line>
+              </svg>
+            </button>
+          </form>
+          
+          <!-- Popular Tags Quick Links -->
+          <div class="quick-tags" aria-label="Popular search tags">
+            <span class="quick-tags-label">Trending:</span>
+            <button type="button" class="quick-tag-chip" data-search-term="JavaScript">JavaScript</button>
+            <button type="button" class="quick-tag-chip" data-search-term="Python">Python</button>
+            <button type="button" class="quick-tag-chip" data-search-term="AWS">AWS</button>
+            <button type="button" class="quick-tag-chip" data-search-term="Figma">Figma</button>
+            <button type="button" class="quick-tag-chip" data-search-term="Security">Cybersecurity</button>
+            <button type="button" class="quick-tag-chip" data-search-term="AI">AI</button>
+          </div>
+        </div>
+
+        <!-- Hero Stats Banner -->
+        <div class="hero-stats">
+          <div class="stat-card">
+            <span class="stat-number" id="stat-total-listings">0</span>
+            <span class="stat-label">Total Listings</span>
+          </div>
+          <div class="stat-card">
+            <span class="stat-number" id="stat-domains-count">6</span>
+            <span class="stat-label">Tech Domains</span>
+          </div>
+          <div class="stat-card">
+            <span class="stat-number" id="stat-remote-count">10+</span>
+            <span class="stat-label">Remote Ready</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Main Dashboard Section -->
+    <section id="listings" class="dashboard-section">
+      <div class="dashboard-container">
+        
+        <!-- Controls Bar: Results Count & Sorting & Mobile Filter Toggle -->
+        <div class="dashboard-controls-bar">
+          <div class="controls-left">
+            <button id="toggle-filter-panel-btn" class="btn-filter-drawer-toggle" aria-expanded="false" aria-controls="filters-panel">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon>
+              </svg>
+              <span>Filters</span>
+              <span id="active-filter-badge" class="filter-count-badge" hidden>0</span>
+            </button>
+            
+            <div class="results-count-text" id="results-count-text" aria-live="polite">
+              Showing <strong id="showing-range-text">0-0</strong> of <strong id="total-filtered-count">0</strong> listings
+            </div>
+          </div>
+
+          <div class="controls-right">
+            <!-- Sort Dropdown -->
+            <div class="sort-control-wrapper">
+              <label for="sort-select" class="sort-label">Sort by:</label>
+              <div class="select-wrapper">
+                <select id="sort-select" class="sort-select" aria-label="Sort listings">
+                  <option value="newest" selected>Newest First</option>
+                  <option value="oldest">Oldest First</option>
+                  <option value="title-asc">Title: A–Z</option>
+                  <option value="title-desc">Title: Z–A</option>
+                </select>
+                <div class="select-arrow" aria-hidden="true">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="6 9 12 15 18 9"></polyline>
+                  </svg>
+                </div>
+              </div>
+            </div>
+
+            <!-- Global Clear All Filters Button -->
+            <button id="clear-all-btn" class="btn-clear-all" title="Clear all active filters and search query">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M3 6h18"></path>
+                <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+              </svg>
+              <span>Reset Filters</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Active Filter Pills Bar -->
+        <div id="active-pills-container" class="active-pills-bar" aria-label="Active filters">
+          <!-- Dynamic Pills will appear here -->
+        </div>
+
+        <!-- Dashboard Layout: Sidebar Filters + Main Grid -->
+        <div class="dashboard-layout">
+          
+          <!-- Filters Sidebar -->
+          <aside id="filters-panel" class="filters-sidebar" aria-label="Listings Filters">
+            <div class="filter-header-mobile">
+              <h3>Filter Opportunities</h3>
+              <button id="close-filters-btn" class="close-filters-btn" aria-label="Close filters panel">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <line x1="18" y1="6" x2="6" y2="18"></line>
+                  <line x1="6" y1="6" x2="18" y2="18"></line>
+                </svg>
+              </button>
+            </div>
+
+            <div class="filter-panel-header">
+              <h2 class="filter-panel-title">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon>
+                </svg>
+                Filter Results
+              </h2>
+              <button type="button" id="sidebar-reset-btn" class="text-button" title="Reset all selections">Reset All</button>
+            </div>
+
+            <form id="filter-form" onsubmit="event.preventDefault();">
+              
+              <!-- Filter Group 1: Domain -->
+              <fieldset class="filter-group">
+                <legend class="filter-group-title">
+                  <span>Domain</span>
+                  <button type="button" class="filter-collapse-btn" aria-expanded="true" aria-controls="group-domain">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                  </button>
+                </legend>
+                <div id="group-domain" class="filter-options-list">
+                  <label class="filter-checkbox-label">
+                    <input type="checkbox" name="domain" value="Web Development" class="filter-checkbox">
+                    <span class="custom-checkbox"></span>
+                    <span class="label-text">Web Development</span>
+                    <span class="category-count" data-count-domain="Web Development">0</span>
+                  </label>
+                  <label class="filter-checkbox-label">
+                    <input type="checkbox" name="domain" value="Data Science" class="filter-checkbox">
+                    <span class="custom-checkbox"></span>
+                    <span class="label-text">Data Science</span>
+                    <span class="category-count" data-count-domain="Data Science">0</span>
+                  </label>
+                  <label class="filter-checkbox-label">
+                    <input type="checkbox" name="domain" value="Cybersecurity" class="filter-checkbox">
+                    <span class="custom-checkbox"></span>
+                    <span class="label-text">Cybersecurity</span>
+                    <span class="category-count" data-count-domain="Cybersecurity">0</span>
+                  </label>
+                  <label class="filter-checkbox-label">
+                    <input type="checkbox" name="domain" value="UI/UX Design" class="filter-checkbox">
+                    <span class="custom-checkbox"></span>
+                    <span class="label-text">UI/UX Design</span>
+                    <span class="category-count" data-count-domain="UI/UX Design">0</span>
+                  </label>
+                  <label class="filter-checkbox-label">
+                    <input type="checkbox" name="domain" value="Artificial Intelligence" class="filter-checkbox">
+                    <span class="custom-checkbox"></span>
+                    <span class="label-text">Artificial Intelligence</span>
+                    <span class="category-count" data-count-domain="Artificial Intelligence">0</span>
+                  </label>
+                  <label class="filter-checkbox-label">
+                    <input type="checkbox" name="domain" value="Cloud Computing" class="filter-checkbox">
+                    <span class="custom-checkbox"></span>
+                    <span class="label-text">Cloud Computing</span>
+                    <span class="category-count" data-count-domain="Cloud Computing">0</span>
+                  </label>
+                </div>
+              </fieldset>
+
+              <!-- Filter Group 2: Experience Level -->
+              <fieldset class="filter-group">
+                <legend class="filter-group-title">
+                  <span>Experience Level</span>
+                  <button type="button" class="filter-collapse-btn" aria-expanded="true" aria-controls="group-experience">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                  </button>
+                </legend>
+                <div id="group-experience" class="filter-options-list">
+                  <label class="filter-checkbox-label">
+                    <input type="checkbox" name="experienceLevel" value="Beginner" class="filter-checkbox">
+                    <span class="custom-checkbox"></span>
+                    <span class="label-text">Beginner</span>
+                    <span class="category-count" data-count-exp="Beginner">0</span>
+                  </label>
+                  <label class="filter-checkbox-label">
+                    <input type="checkbox" name="experienceLevel" value="Intermediate" class="filter-checkbox">
+                    <span class="custom-checkbox"></span>
+                    <span class="label-text">Intermediate</span>
+                    <span class="category-count" data-count-exp="Intermediate">0</span>
+                  </label>
+                  <label class="filter-checkbox-label">
+                    <input type="checkbox" name="experienceLevel" value="Advanced" class="filter-checkbox">
+                    <span class="custom-checkbox"></span>
+                    <span class="label-text">Advanced</span>
+                    <span class="category-count" data-count-exp="Advanced">0</span>
+                  </label>
+                </div>
+              </fieldset>
+
+              <!-- Filter Group 3: Work Mode -->
+              <fieldset class="filter-group">
+                <legend class="filter-group-title">
+                  <span>Work Mode</span>
+                  <button type="button" class="filter-collapse-btn" aria-expanded="true" aria-controls="group-workmode">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                  </button>
+                </legend>
+                <div id="group-workmode" class="filter-options-list">
+                  <label class="filter-checkbox-label">
+                    <input type="checkbox" name="workMode" value="Remote" class="filter-checkbox">
+                    <span class="custom-checkbox"></span>
+                    <span class="label-text">Remote</span>
+                    <span class="category-count" data-count-mode="Remote">0</span>
+                  </label>
+                  <label class="filter-checkbox-label">
+                    <input type="checkbox" name="workMode" value="Hybrid" class="filter-checkbox">
+                    <span class="custom-checkbox"></span>
+                    <span class="label-text">Hybrid</span>
+                    <span class="category-count" data-count-mode="Hybrid">0</span>
+                  </label>
+                  <label class="filter-checkbox-label">
+                    <input type="checkbox" name="workMode" value="On-site" class="filter-checkbox">
+                    <span class="custom-checkbox"></span>
+                    <span class="label-text">On-site</span>
+                    <span class="category-count" data-count-mode="On-site">0</span>
+                  </label>
+                </div>
+              </fieldset>
+
+              <!-- Filter Drawer Apply Button (for mobile) -->
+              <div class="filter-drawer-actions">
+                <button type="button" id="apply-mobile-filters-btn" class="btn-primary full-width">Show Listings</button>
+              </div>
+            </form>
+          </aside>
+
+          <!-- Listings Content Area -->
+          <div class="listings-content-area">
+            
+            <!-- Cards Grid Container -->
+            <div id="listings-grid" class="listings-grid" aria-live="polite">
+              <!-- Cards, Skeletons, or States will be rendered dynamically -->
+            </div>
+
+            <!-- Pagination Container -->
+            <nav id="pagination-nav" class="pagination-container" aria-label="Listings Pagination">
+              <!-- Dynamic Pagination Controls -->
+            </nav>
+
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="about-section">
+      <div class="about-container">
+        <div class="about-card">
+          <div class="about-badge">About The Project</div>
+          <h2 class="about-title">Built with Pure Vanilla Web Standards</h2>
+          <p class="about-description">
+            Searchable is a high-performance listing dashboard built entirely using <strong>HTML5</strong>, <strong>CSS3</strong>, and <strong>Vanilla JavaScript (ES6+)</strong>. Designed without heavy framework dependencies, it showcases instant client-side multi-criteria search with debouncing, multi-category AND/OR filtering, dynamic sorting, responsive pagination, accessible modal views, and graceful state handling.
+          </p>
+          <div class="tech-specs-grid">
+            <div class="tech-spec-item">
+              <div class="spec-icon">⚡</div>
+              <h3>Debounced Search</h3>
+              <p>250ms debounced queries across titles, descriptions, skills, and keywords with real-time text highlighting.</p>
+            </div>
+            <div class="tech-spec-item">
+              <div class="spec-icon">🎯</div>
+              <h3>Compound Filtering</h3>
+              <p>Logical <code>AND</code> across categories combined with flexible <code>OR</code> within multi-selected values.</p>
+            </div>
+            <div class="tech-spec-item">
+              <div class="spec-icon">♿</div>
+              <h3>A11y Accessible</h3>
+              <p>Keyboard navigation, focus management, ARIA live regions, and escape-key dismissable modals.</p>
+            </div>
+            <div class="tech-spec-item">
+              <div class="spec-icon">📱</div>
+              <h3>Fluid Grid</h3>
+              <p>Fully responsive 1/2/3 column layout tested across mobile, tablet, laptop, and ultra-wide screens.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Listing Details Modal -->
+  <div id="listing-modal" class="modal-overlay" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="modal-listing-title">
+    <div class="modal-backdrop" id="modal-backdrop"></div>
+    <div class="modal-card" id="modal-card">
+      <button id="modal-close-btn" class="modal-close-btn" aria-label="Close details dialog">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="18" y1="6" x2="6" y2="18"></line>
+          <line x1="6" y1="6" x2="18" y2="18"></line>
+        </svg>
+      </button>
+
+      <div class="modal-header">
+        <div class="modal-meta-top">
+          <span id="modal-domain-badge" class="badge badge-domain">Domain</span>
+          <span id="modal-type-badge" class="badge badge-type">Type</span>
+          <span id="modal-mode-badge" class="badge badge-mode">Work Mode</span>
+        </div>
+        <h2 id="modal-listing-title" class="modal-title">Listing Title</h2>
+        <div class="modal-quick-info">
+          <span class="info-item">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+            <span id="modal-duration">Duration</span>
+          </span>
+          <span class="info-item">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="8.5" cy="7" r="4"></circle><polyline points="17 11 19 13 23 9"></polyline></svg>
+            <span id="modal-experience">Experience</span>
+          </span>
+          <span class="info-item">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+            <span id="modal-posted-date">Posted Date</span>
+          </span>
+        </div>
+      </div>
+
+      <div class="modal-body">
+        <div class="modal-section">
+          <h3 class="modal-section-title">Overview & Responsibilities</h3>
+          <p id="modal-description" class="modal-description-text"></p>
+        </div>
+
+        <div class="modal-section">
+          <h3 class="modal-section-title">Required Skills & Technologies</h3>
+          <div id="modal-skills-container" class="skills-tags-container"></div>
+        </div>
+
+        <div class="modal-section">
+          <h3 class="modal-section-title">Search Keywords & Categories</h3>
+          <div id="modal-keywords-container" class="keywords-tags-container"></div>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <div class="modal-footer-left">
+          <button type="button" id="modal-save-btn" class="btn-outline">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path></svg>
+            <span id="modal-save-text">Save Opportunity</span>
+          </button>
+          <button type="button" id="modal-share-btn" class="btn-outline">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line></svg>
+            <span>Share</span>
+          </button>
+        </div>
+        <div class="modal-footer-right">
+          <button type="button" id="modal-apply-btn" class="btn-primary">
+            <span>Apply Now</span>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Saved Listings Drawer / Modal -->
+  <div id="saved-modal" class="modal-overlay" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="saved-modal-title">
+    <div class="modal-backdrop" id="saved-modal-backdrop"></div>
+    <div class="modal-card modal-card-sm" id="saved-modal-card">
+      <button id="saved-close-btn" class="modal-close-btn" aria-label="Close saved items dialog">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+      </button>
+      <div class="modal-header">
+        <h2 id="saved-modal-title" class="modal-title">Saved Opportunities</h2>
+        <p class="modal-subtitle">Quickly access projects you've bookmarked during your session.</p>
+      </div>
+      <div class="modal-body">
+        <div id="saved-listings-list" class="saved-listings-list">
+          <!-- Rendered saved items or empty indicator -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="app-footer">
+    <div class="footer-container">
+      <div class="footer-brand-col">
+        <div class="footer-logo">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+            <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
+            <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
+            <line x1="12" y1="22.08" x2="12" y2="12"></line>
+          </svg>
+          <span>Searchable</span>
+        </div>
+        <p class="footer-tagline">Connecting ambitious talent with world-class tech opportunities.</p>
+      </div>
+
+      <div class="footer-links-col">
+        <h4>Domains</h4>
+        <ul>
+          <li><button type="button" class="footer-link-btn" data-domain-filter="Web Development">Web Development</button></li>
+          <li><button type="button" class="footer-link-btn" data-domain-filter="Artificial Intelligence">Artificial Intelligence</button></li>
+          <li><button type="button" class="footer-link-btn" data-domain-filter="Cloud Computing">Cloud Computing</button></li>
+          <li><button type="button" class="footer-link-btn" data-domain-filter="Cybersecurity">Cybersecurity</button></li>
+        </ul>
+      </div>
+
+      <div class="footer-links-col">
+        <h4>Experience</h4>
+        <ul>
+          <li><button type="button" class="footer-link-btn" data-exp-filter="Beginner">Beginner / Internships</button></li>
+          <li><button type="button" class="footer-link-btn" data-exp-filter="Intermediate">Intermediate Roles</button></li>
+          <li><button type="button" class="footer-link-btn" data-exp-filter="Advanced">Senior / Lead Architect</button></li>
+        </ul>
+      </div>
+
+      <div class="footer-links-col">
+        <h4>Project Links</h4>
+        <ul>
+          <li><a href="https://github.com/ziyakausar07/searchable" target="_blank" rel="noopener noreferrer">GitHub Repository</a></li>
+          <li><a href="#listings">Search Dashboard</a></li>
+          <li><a href="#about">Architecture & Docs</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2026 Searchable Dashboard. Crafted with modern Vanilla HTML5, CSS3 & ES6+ JavaScript.</p>
+    </div>
+  </footer>
+
+  <!-- Core JavaScript -->
+  <script src="js/app.js"></script>
+</body>
+</html>
